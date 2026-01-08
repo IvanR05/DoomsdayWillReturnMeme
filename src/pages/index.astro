@@ -178,14 +178,20 @@ import '../styles/global.css';
 		</form>
 		
 		<script>
+			// Encode text to hide it in the URL
+			function encodeText(text) {
+				return btoa(text);
+			}
+
 			document.getElementById('inputForm')?.addEventListener('submit', async (e) => {
 				e.preventDefault();
 				const input = document.getElementById('nameInput');
 				const text = input instanceof HTMLInputElement ? input.value.trim() : '';
 				
 				if(text){
+					const encoded = encodeText(text);
 					const base = window.location.origin.replace(/\/$/, '');
-					const url = base + '/' + encodeURIComponent(text);
+					const url = base + '/' + encoded;
 					await navigator.clipboard.writeText(url);
 					const status = document.getElementById('copyStatus');
 					if(status){

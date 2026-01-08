@@ -1,6 +1,18 @@
 ---
-const { name } = Astro.params;
 import '../styles/global.css';
+
+// Decode the text from the URL
+function decodeText(encoded: string): string {
+	try {
+		return atob(encoded);
+	} catch (e) {
+		// Fallback for old-style URLs
+		return decodeURIComponent(encoded);
+	}
+}
+
+const { name: encodedName } = Astro.params;
+const name = encodedName ? decodeText(encodedName) : '';
 ---
 
 <html lang="es">
