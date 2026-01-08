@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import Analytics from '@vercel/analytics/astro';
 ---
 
 <html lang="es">
@@ -9,6 +10,7 @@ import '../styles/global.css';
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="generator" content={Astro.generator} />
 		<title>X will return in Avengers: Doomsday</title>
+		<Analytics />
 
 		<style>
 			body {
