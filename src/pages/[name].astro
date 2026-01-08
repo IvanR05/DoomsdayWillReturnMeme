@@ -1,0 +1,205 @@
+---
+const { name } = Astro.params;
+import '../styles/global.css';
+---
+
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content={Astro.generator} />
+        <title>{name} will return in Avengers: Doomsday</title>
+        <style>
+			body {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				font-size: 2.5vw;
+				letter-spacing: 0.3em;
+				padding: 2rem;
+				overflow: hidden;
+			}
+
+			p {
+				white-space: nowrap;
+				text-align: center;
+				max-width: 100%;
+			}
+
+			@media (max-width: 768px) {
+				body {
+					font-size: 5vw;
+					letter-spacing: 0.15em;
+					padding: 1rem;
+				}
+			}
+
+			@media (max-width: 480px) {
+				body {
+					font-size: 6vw;
+					letter-spacing: 0.1em;
+					padding: 0.5rem;
+				}
+			}
+
+			span {
+				opacity: 0;
+			}
+
+			#content.visible span {
+				animation: fadeIn 1s ease-in forwards;
+			}
+
+			#content.visible span:nth-child(1) {
+				animation-delay: 0s;
+			}
+
+			#content.visible span:nth-child(2) {
+				animation-delay: 3s;
+			}
+
+			#content.visible span:nth-child(3) {
+				animation-delay: 5s;
+			}
+
+			@keyframes fadeIn {
+				to {
+					opacity: 1;
+				}
+			}
+
+			#enterButton {
+				position: fixed;
+				inset: 0;
+				background: black;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				cursor: pointer;
+				z-index: 1000;
+				font-size: 3vw;
+				transition: opacity 0.5s;
+				padding: 1rem;
+				text-align: center;
+			}
+
+			@media (max-width: 768px) {
+				#enterButton {
+					font-size: 5vw;
+				}
+			}
+
+			@media (max-width: 480px) {
+				#enterButton {
+					font-size: 6vw;
+				}
+			}
+
+			#enterButton.hidden {
+				opacity: 0;
+				pointer-events: none;
+			}
+
+			#content {
+				opacity: 0;
+				transition: opacity 0.5s;
+			}
+
+			#content.visible {
+				opacity: 1;
+			}
+
+			.green-link {
+				color: #22c55e;
+			}
+
+		</style>
+    </head>
+    <body>
+        <audio id="avengersAudio" src="/sounds/avengersdoomsday.mp3" preload="auto"></audio>
+        
+		<div id="enterButton">YOU WON'T BELIEVE IT, CLICK ME!</div>
+		
+		<div id="content">
+			<p>
+			<span>{name} </span>
+			<span> Will Return In </span>
+			<span> Avengers: Doomsday</span>
+			</p>
+		</div>
+
+		<script>
+			const audio = document.getElementById('avengersAudio') as HTMLAudioElement;
+			const enterButton = document.getElementById('enterButton') as HTMLDivElement;
+			const content = document.getElementById('content') as HTMLDivElement;
+			
+			// Function to scale text to fit viewport
+			function scaleTextToFit() {
+				const paragraph = content.querySelector('p') as HTMLParagraphElement;
+				if (!paragraph) return;
+				
+				// Get viewport width
+				const viewportWidth = window.innerWidth;
+				
+				// Get body padding
+				const bodyStyles = getComputedStyle(document.body);
+				const paddingLeft = parseFloat(bodyStyles.paddingLeft);
+				const paddingRight = parseFloat(bodyStyles.paddingRight);
+				const maxWidth = viewportWidth - paddingLeft - paddingRight - 20; // 20px extra margin
+				
+				// Temporarily make visible to measure
+				const wasVisible = content.classList.contains('visible');
+				if(!wasVisible){
+					content.style.visibility = 'hidden';
+					content.style.opacity = '1';
+				}
+				
+				// Reset font size to body's computed size
+				paragraph.style.fontSize = '';
+				paragraph.style.letterSpacing = '';
+				
+				// Measure actual width
+				let currentWidth = paragraph.scrollWidth;
+				
+				if(currentWidth > maxWidth){
+					const scale = maxWidth / currentWidth;
+					const currentFontSize = parseFloat(getComputedStyle(paragraph).fontSize);
+					const currentLetterSpacing = parseFloat(getComputedStyle(paragraph).letterSpacing) || 0;
+					
+					paragraph.style.fontSize = `${currentFontSize * scale}px`;
+					paragraph.style.letterSpacing = `${currentLetterSpacing * scale}px`;
+				}
+				
+				// Restore visibility state
+				if(!wasVisible){
+					content.style.visibility = '';
+					content.style.opacity = '';
+				}
+			}
+			
+			// Scale on page load
+			window.addEventListener('load', scaleTextToFit);
+			
+			enterButton?.addEventListener('click', () => {
+				enterButton.classList.add('hidden');
+				
+				setTimeout(() => {
+					audio?.play();
+					content?.classList.add('visible');
+					
+					// Scale text after it becomes visible
+					setTimeout(scaleTextToFit, 100);
+				}, 500);
+			});
+			
+			// Re-scale on window resize
+			window.addEventListener('resize', scaleTextToFit);
+		</script>
+
+		<footer>
+			<p>Wanna do your own?  <a href="/" class="green-link">Click here</a></p>
+			<p>Made by <a href="https://github.com/IvanR05/DoomsdayWillReturnMeme" target="_blank">IvanR05</a>. </p>
+		</footer>
+    </body>
+</html>

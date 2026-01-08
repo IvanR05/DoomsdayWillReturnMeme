@@ -1,0 +1,211 @@
+---
+import '../styles/global.css';
+---
+
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="generator" content={Astro.generator} />
+		<title>X will return in Avengers: Doomsday</title>
+
+		<style>
+			body {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				gap: 40px;
+				padding: 1rem;
+				min-height: 100vh;
+				min-height: 100dvh;
+				width: 100%;
+			}
+
+			p {
+				font-size: 40px;
+				letter-spacing: 15px;
+				text-align: center;
+			}
+
+			input {
+				padding: 15px;
+				font-size: 40px;
+				letter-spacing: 15px;
+				border: none;
+				border-radius: 5px;
+				text-align: center;
+				max-width: 100%;
+			}
+
+			@media (max-width: 768px) {
+				body {
+					gap: 25px;
+				}
+
+				p {
+					font-size: 24px;
+					letter-spacing: 8px;
+					line-height: 1.6;
+				}
+
+				input {
+					padding: 12px;
+					font-size: 20px;
+					letter-spacing: 5px;
+					width: 100%;
+				}
+			}
+
+			@media (max-width: 480px) {
+				body {
+					gap: 20px;
+				}
+
+				p {
+					font-size: 18px;
+					letter-spacing: 5px;
+				}
+
+				input {
+					padding: 10px;
+					font-size: 16px;
+					letter-spacing: 3px;
+				}
+			}
+
+			input::placeholder {
+				opacity: 0.2;
+			}
+
+			form {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				gap: 10px;
+				width: 100%;
+				max-width: 600px;
+			}
+
+			.copy-btn {
+				position: relative;
+				width: 48px;
+				height: 48px;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				background: transparent;
+				color: white;
+				border: 2px solid #666;
+				border-radius: 8px;
+				cursor: pointer;
+				transition: color 200ms ease, border-color 200ms ease, background-color 200ms ease;
+				flex-shrink: 0;
+			}
+
+			@media (max-width: 480px) {
+				.copy-btn {
+					width: 42px;
+					height: 42px;
+				}
+
+				.copy-btn svg {
+					width: 20px;
+					height: 20px;
+				}
+			}
+
+			.copy-btn:hover {
+				color: #22c55e;
+				border-color: #22c55e;
+				background-color: rgba(34, 197, 94, 0.1);
+			}
+
+			.status {
+				width: 120px;
+				position: absolute;
+				top: 180%;
+				left: 90%;
+				transform: translateY(-50%) rotate(-30deg);
+				text-align: center;
+				font-size: 20px;
+				font-family: 'Cooper Hewitt', sans-serif;
+				color: #22c55e;
+				opacity: 0;
+				transition: opacity 200ms ease;
+			}
+
+			@media (max-width: 768px) {
+				.status {
+					font-size: 16px;
+					width: 100px;
+				}
+			}
+
+			@media (max-width: 480px) {
+				.status {
+					font-size: 14px;
+					width: 80px;
+					top: 150%;
+				}
+			}
+
+			.status.show {
+				opacity: 1;
+			}
+
+		</style>
+	</head>
+	<body>
+		<p>
+			<span>WHO </span>
+			<span> Will Return In </span>
+			<span> Avengers: Doomsday ?</span>
+		</p>
+
+		<form id="inputForm">
+			<input type="text" id="nameInput" placeholder="Thanos">
+			<button type="submit" class="copy-btn" aria-label="Copy link">
+				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+					<rect x="8" y="3" width="8" height="4" rx="1" stroke="currentColor" stroke-width="2" />
+					<rect x="5" y="7" width="14" height="14" rx="2" stroke="currentColor" stroke-width="2" />
+				</svg>
+
+				<span id="copyStatus" class="status" role="status" aria-live="polite"></span>
+			</button>
+			
+		</form>
+		
+		<script>
+			document.getElementById('inputForm')?.addEventListener('submit', async (e) => {
+				e.preventDefault();
+				const input = document.getElementById('nameInput');
+				const text = input instanceof HTMLInputElement ? input.value.trim() : '';
+				
+				if(text){
+					const base = window.location.origin.replace(/\/$/, '');
+					const url = base + '/' + encodeURIComponent(text);
+					await navigator.clipboard.writeText(url);
+					const status = document.getElementById('copyStatus');
+					if(status){
+						status.textContent = 'Link copied!';
+						status.classList.add('show');
+						setTimeout(() => {
+							status.classList.remove('show')
+							status.textContent = '';
+						}, 2000);
+					}
+				}
+			});
+		</script>
+
+		<footer>
+			Made by <a href="https://github.com/IvanR05/DoomsdayWillReturnMeme" target="_blank">IvanR05</a>.<br>
+			
+			This website is a fan-made, non-commercial project created for entertainment purposes only.<br>
+			Marvel, Marvel Studios, and all related characters, images, logos, and sounds are trademarks and copyrights of Marvel Entertainment, LLC and The Walt Disney Company.<br>
+			This site is not affiliated with, endorsed by, or sponsored by Marvel or Disney.
+		</footer>
+	</body>
+</html>
